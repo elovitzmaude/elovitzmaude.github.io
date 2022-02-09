@@ -1,0 +1,48 @@
+---
+title: 'Graphing in R: ggplot2 package'
+author: "Maude Elovitz"
+date: "2/7/2022"
+output: html_document
+---
+
+The best way to provide information to consumers is to present it in a clear and creative way. This is a tutorial on one of the many ways in which R and RStudio can help you present visualizations to communicate in your own way, while keeping information absorable.
+
+**Importing Data and Loading Packages**
+
+First, upload a dataset of your choosing. For this example, I am using a dataset collected from Kaggle (https://www.kaggle.com/yamqwe/california-sat-report-2011-2012e) titled "California SAT Report 2011-2012". If you are importing your data from your computer, make sure to save it in a location you can find it, so importing will be a breeze.
+
+You can see my code for importing here:
+
+```{r}
+library(readr)
+SAT_data <- read_csv("Desktop/Website/SAT Report 2011-2012.csv", na = "NA", skip = 3)
+```
+
+Now, we want to load our packages. The goal of this tutorial is to highlight ggplot2, which is a package in the Tidyverse suite of packages in R. If you do not already have the Tidyverse suite of packages installed into your R, you can use the following code to do so:
+
+```{r}
+install.packages("tidyverse")
+```
+
+Then, be sure to load the installed suite of packages and the package we plan to use by using:
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+
+**Creating Visualizations**
+
+ggplot2 has a multitude of methods to create interesting visualizations of your data. I will illustrate a few below for you. 
+
+***Basic bar graph***
+
+Let's say I wanted to illustrate the number of SAT tests taken in each country in California. I could use:
+
+```{r}
+SAT_data = SAT_data %>%
+  group_by(`County Name`) %>%
+  mutate(tests_by_county = sum(`Number\nTested`))
+  #ggplot(aes(x = tests_by_county)) + geom_bar()
+```
+

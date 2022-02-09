@@ -1,0 +1,32 @@
+---
+title: "Maude Elovitz"
+image: "picture.jpeg"
+links:
+  - label: GitHub
+    url: "https://github.com/elovitzmaude"
+  - label: Email
+    url: "mailto:moelovitz@gmail.com"
+output:
+  postcards::trestles
+---
+ 
+## Bio
+
+Maude Elovitz (she/her) is an undergraduate student at Simmons University studying Data Science and Analytics. She is passionate about education and hopeful to pursue a Masters of Science in Education, to then teach advanced high school mathematics. She enjoys discussing math, and finding new ways to help others learn computing techniques, mathematics, and statistical methods. Maude works in various leadership positions at Simmons, including, but not limited to, being the Varsity captain for 3+ years on her NCAA DIII rowing team, being a teachers assistant in Introduction to Mathematics, and leading the Simmons Academic Mentors team in the Senior position.
+
+
+## Education
+
+**Simmons University** | Boston, MA
+
+B. S. in Data Science and Analytics | Anticipated Graduation, May 2022
+
+## Writing and Tutorial Samples
+
+**Data Mining Report: Agglomerative Hierarchical Clustering** | [LINK](346Midterm_Report_Elovitz.html)
+
+**Causal Inference Report: Synthetic Controls** | LINK
+
+**R Tutorial: Building a Bar Graph** | LINK
+
+
