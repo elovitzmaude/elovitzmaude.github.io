@@ -1,48 +1,126 @@
 ---
 title: 'Graphing in R: ggplot2 package'
 author: "Maude Elovitz"
-date: "2/7/2022"
 output: html_document
 ---
 
 The best way to provide information to consumers is to present it in a clear and creative way. This is a tutorial on one of the many ways in which R and RStudio can help you present visualizations to communicate in your own way, while keeping information absorable.
 
-**Importing Data and Loading Packages**
+*Importing Data and Loading Packages*
 
 First, upload a dataset of your choosing. For this example, I am using a dataset collected from Kaggle (https://www.kaggle.com/yamqwe/california-sat-report-2011-2012e) titled "California SAT Report 2011-2012". If you are importing your data from your computer, make sure to save it in a location you can find it, so importing will be a breeze.
 
-You can see my code for importing here:
-
-```{r}
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
 library(readr)
-SAT_data <- read_csv("Desktop/Website/SAT Report 2011-2012.csv", na = "NA", skip = 3)
+SAT_Data <- read_csv("SATReport.csv", 
+col_types = cols(`County\nNumber` = col_skip(), 
+`District\nNumber` = col_skip(), 
+`School\nNumber` = col_skip(), `Grade\n12` = col_integer(), 
+`Number\nTested` = col_integer(), 
+`Percent\nTested` = col_integer(), 
+V_Mean = col_skip(), M_Mean = col_skip(), 
+W_Mean = col_skip(), Tot_Mean = col_skip(), 
+GE1500Ct = col_skip(), Rate1500 = col_skip()), 
+skip = 3)
+
+colnames(SAT_Data) <- c("county_name", "district_name", "school_name", "grade_12", "number_tested", "percent_tested")
+
+SAT_Data[is.na(SAT_Data)] = 0
 ```
 
 Now, we want to load our packages. The goal of this tutorial is to highlight ggplot2, which is a package in the Tidyverse suite of packages in R. If you do not already have the Tidyverse suite of packages installed into your R, you can use the following code to do so:
 
-```{r}
 install.packages("tidyverse")
-```
 
 Then, be sure to load the installed suite of packages and the package we plan to use by using:
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(ggplot2)
 ```
 
-**Creating Visualizations**
+*Creating Visualizations*
 
 ggplot2 has a multitude of methods to create interesting visualizations of your data. I will illustrate a few below for you. 
 
-***Basic bar graph***
+**Basic bar graph**
 
-Let's say I wanted to illustrate the number of SAT tests taken in each country in California. I could use:
+Let's say I wanted to illustrate the percentage of SAT tests taken in each country in California. I could use:
 
 ```{r}
-SAT_data = SAT_data %>%
-  group_by(`County Name`) %>%
-  mutate(tests_by_county = sum(`Number\nTested`))
-  #ggplot(aes(x = tests_by_county)) + geom_bar()
+SAT_Data %>%
+  group_by(county_name) %>%
+  summarize(percent_tested = (sum(number_tested)/sum(grade_12)*100)) %>%
+  ggplot(aes(x = county_name, y = percent_tested)) + geom_col()
 ```
 
+You can see in the code above, I am using different methods from the Tidyverse suite of packages. The over-arching method I am using is the 'pipeline', which connects all of my code to the dataset I am using, 'SAT_Data'. This is a shortcut to having more efficient and clear code. By using the pipeline, R takes a stepwise approach, and considers the named dataset in each subsequent method that is used.
+
+Other methods I am using include 'group_by()', which groups your categorical data together. I am also using 'summarize()', which commonly follows 'group_by()' and is used to utilize the categorical groups created. Meaning, I grouped by county_name, so my summarize is going to use the groups created (each county) to collect a percentage_tested statistic. This statistic is totaling up all of the people tested (number_tested) at each high school in the county, and dividing it by the total seniors (grade_12) in each county, to get a generalized percentage tested from each county in California.
+
+Then, I added in my ggplot() code. Within my ggplot() code, you can see I have aes() written, which maps certain variables to the x-axis and y-axis of the graph. I am making a bar graph, and with ggplot(), you have 2 options to make a bar graph:
+
++ geom_col() to the end of your ggplot() code, which is what I am using, and that maps a categorical variable to your x-axis, and a numerical variable to your y-axis.
+
++ geom_bar() to the end of your ggplot() code, which only maps a categorical variable to your x-axis, and uses frequencies of the variable to show the distribution of the certain variable.
+
+**Reordering Our Bars**
+
+Now, we did create a bar graph, but ggplot2 has other features to assist us with data visualization. In the previous graph, we can see that our bars are out of order, and are not listed from highest percentage to lowest percentage tested. Additionally, the x-axis labels are barely readable, so that should be adjusted, too.
+
+In order to fix that, we can use the following code:
+
+```{r}
+SAT_Data %>%
+  group_by(county_name) %>%
+  summarize(percent_tested = (sum(number_tested)/sum(grade_12)*100)) %>%
+  ggplot(aes(x = fct_reorder(county_name, percent_tested), y = percent_tested)) + geom_col() + coord_flip()
+```
+
+The slight change we made here was adding 'fct_reorder(x, y) into our aes() mapping to move our highest percentage counties to the top, and our lowest to the bottom. This can greatly improve your visualization.
+
+Also, I added + coord_flip() to my code, which flips the x-axis and y-axis, making the labels more readable.
+
+**Adding Labels**
+
+To make our graph easier to understand, and clearly communicate our data, we can add labels, which is another feature of ggplot2. 
+
+```{r}
+SAT_Data %>%
+  group_by(county_name) %>%
+  summarize(percent_tested = (sum(number_tested)/sum(grade_12)*100)) %>%
+  ggplot(aes(x = fct_reorder(county_name, percent_tested), y = percent_tested)) + 
+  geom_col() + 
+  coord_flip() +
+  labs(title = "Percentage of Seniors Tested by County in 2011-2012", x = "County Name", y = "Percentage Tested")
+```
+
+Here I added labels for my x-axis (County Name) and y-axis (Percentage Tested). Remember, we added coord_flip() in our previous step, so our x-axis and y-axis were flipped, which is why our labels appear in the places they do. 
+
+**Changing Text Size**
+
+Our last adjustment to be made is to our x-axis, where, as we can see in the graph above, our labels are still a little difficult to read.
+
+We can adjust that by using:
+
++ theme(axis.test.x or y = element_text(size = size you want your text to be)
+
+```{r}
+SAT_Data %>%
+  group_by(county_name) %>%
+  summarize(percent_tested = (sum(number_tested)/sum(grade_12)*100)) %>%
+  ggplot(aes(x = fct_reorder(county_name, percent_tested), y = percent_tested)) + geom_col(width = 0.2) + coord_flip() + 
+  labs(title = "Percentage of Seniors Tested by County in 2011-2012", x = "County Name", y = "Percentage Tested") +
+  #retrieved from https://statisticsglobe.com/change-font-size-of-ggplot2-plot-in-r-axis-text-main-title-legend
+  theme(axis.text.y = element_text(size = 6))
+```
+
+I wanted to change my y-axis labels (county name) to be smaller to they can be more readable, so I used:
+
++ theme(axis.text.y = element_text(size = 6))
+
+which changed my y-axis text to size 6.
+
+**Overall...**
+
+The ggplot package in the Tidyverse suite is a great package to create clear and detailed data visualizations. Making clear data visualizations helps to communicate your data to your consumers, and R tutorials are a great building block to see how you can make your absorable graphs more creative.  

@@ -12,7 +12,7 @@ output:
  
 ## Bio
 
-Maude Elovitz (she/her) is an undergraduate student at Simmons University studying Data Science and Analytics. She is passionate about education and hopeful to pursue a Masters of Science in Education, to then teach advanced high school mathematics. She enjoys discussing math, and finding new ways to help others learn computing techniques, mathematics, and statistical methods. Maude works in various leadership positions at Simmons, including, but not limited to, being the Varsity captain for 3+ years on her NCAA DIII rowing team, being a teachers assistant in Introduction to Mathematics, and leading the Simmons Academic Mentors team in the Senior position.
+Maude Elovitz (she/her) is an undergraduate student at Simmons University studying Data Science and Analytics. She is passionate about education and hopeful to pursue a Masters of Science in Education, to then teach advanced high school mathematics. She enjoys discussing math, and finding new ways to help others learn computing techniques, mathematics, and statistical analysis methods. Maude works in various leadership positions at Simmons, including, but not limited to, being the Varsity captain for 3+ years on her NCAA DIII rowing team, being a teachers assistant in Introduction to Mathematics, and leading the Simmons Academic Mentors team in the Senior position.
 
 
 ## Education
@@ -23,10 +23,12 @@ B. S. in Data Science and Analytics | Anticipated Graduation, May 2022
 
 ## Writing and Tutorial Samples
 
-**Data Mining Report: Agglomerative Hierarchical Clustering** | [LINK](346Midterm_Report_Elovitz.html)
+**Writing Sample: Blog Post on Near Misses and Bingo** | [Report](MiniProject2.html)
+This sample showcases my ability to explain statistics and probability in an absorbable way. 
 
-**Causal Inference Report: Synthetic Controls** | LINK
+**Flexdashboard: SNAP and Farmers Markets Analysis** | [Report](SNAPMarketFlex.html)
+This report is an example of my experience with the R package 'Flexdashboard'. 
 
-**R Tutorial: Building a Bar Graph** | LINK
+**R Tutorial: Building a Bar Graph** | [Report]
 
 
