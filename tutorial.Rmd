@@ -1,5 +1,5 @@
 ---
-title: 'Graphing in R: ggplot2 package'
+title: 'Graphing in R: ggplot package'
 author: "Maude Elovitz"
 output: html_document
 ---
@@ -28,7 +28,7 @@ colnames(SAT_Data) <- c("county_name", "district_name", "school_name", "grade_12
 SAT_Data[is.na(SAT_Data)] = 0
 ```
 
-Now, we want to load our packages. The goal of this tutorial is to highlight ggplot2, which is a package in the Tidyverse suite of packages in R. If you do not already have the Tidyverse suite of packages installed into your R, you can use the following code to do so:
+Now, we want to load our packages. The goal of this tutorial is to highlight ggplot, which is a package in the Tidyverse suite of packages in R. If you do not already have the Tidyverse suite of packages installed into your R, you can use the following code to do so:
 
 install.packages("tidyverse")
 
@@ -36,12 +36,12 @@ Then, be sure to load the installed suite of packages and the package we plan to
 
 ```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
-library(ggplot2)
+library(ggplot)
 ```
 
 *Creating Visualizations*
 
-ggplot2 has a multitude of methods to create interesting visualizations of your data. I will illustrate a few below for you. 
+ggplot has a multitude of methods to create interesting visualizations of your data. I will illustrate a few below for you. 
 
 **Basic bar graph**
 
@@ -66,7 +66,7 @@ Then, I added in my ggplot() code. Within my ggplot() code, you can see I have a
 
 **Reordering Our Bars**
 
-Now, we did create a bar graph, but ggplot2 has other features to assist us with data visualization. In the previous graph, we can see that our bars are out of order, and are not listed from highest percentage to lowest percentage tested. Additionally, the x-axis labels are barely readable, so that should be adjusted, too.
+Now, we did create a bar graph, but ggplot has other features to assist us with data visualization. In the previous graph, we can see that our bars are out of order, and are not listed from highest percentage to lowest percentage tested. Additionally, the x-axis labels are barely readable, so that should be adjusted, too.
 
 In order to fix that, we can use the following code:
 
@@ -83,7 +83,7 @@ Also, I added + coord_flip() to my code, which flips the x-axis and y-axis, maki
 
 **Adding Labels**
 
-To make our graph easier to understand, and clearly communicate our data, we can add labels, which is another feature of ggplot2. 
+To make our graph easier to understand, and clearly communicate our data, we can add labels, which is another feature of ggplot. 
 
 ```{r}
 SAT_Data %>%
@@ -111,7 +111,7 @@ SAT_Data %>%
   summarize(percent_tested = (sum(number_tested)/sum(grade_12)*100)) %>%
   ggplot(aes(x = fct_reorder(county_name, percent_tested), y = percent_tested)) + geom_col(width = 0.2) + coord_flip() + 
   labs(title = "Percentage of Seniors Tested by County in 2011-2012", x = "County Name", y = "Percentage Tested") +
-  #retrieved from https://statisticsglobe.com/change-font-size-of-ggplot2-plot-in-r-axis-text-main-title-legend
+  #retrieved from https://statisticsglobe.com/change-font-size-of-ggplot-plot-in-r-axis-text-main-title-legend
   theme(axis.text.y = element_text(size = 6))
 ```
 
@@ -123,4 +123,4 @@ which changed my y-axis text to size 6.
 
 **Overall...**
 
-The ggplot package in the Tidyverse suite is a great package to create clear and detailed data visualizations. Making clear data visualizations helps to communicate your data to your consumers, and R tutorials are a great building block to see how you can make your absorable graphs more creative.  
+The ggplot package in the Tidyverse suite is a great package to create clear and detailed data visualizations. Making clear data visualizations helps to communicate your data to your consumers, and R tutorials are a great building block to see how you can make your accessible graphs more creative.  

@@ -24,11 +24,11 @@ B. S. in Data Science and Analytics | Anticipated Graduation, May 2022
 ## Writing and Tutorial Samples
 
 **Writing Sample: Blog Post on Near Misses and Bingo** | [Report](MiniProject2.html)
-This sample showcases my ability to explain statistics and probability in an absorbable way. 
+This sample showcases my ability to explain statistics and probability in an accessible way. 
 
 **Flexdashboard: SNAP and Farmers Markets Analysis** | [Report](SNAPMarketFlex.html)
 This report is an example of my experience with the R package 'Flexdashboard'. 
 
-**R Tutorial: Building a Bar Graph** | [Report]
-
+**R Tutorial: Building a Bar Graph** | [Report](tutorial.html)
+This tutorial walks a user through creating a basic bar graph using the ggplot package in the Tidyverse suite. This tutorial shows my experience with the Tidyverse suite of packages and RMarkdown.
 

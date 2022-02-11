@@ -1,0 +1,230 @@
+---
+title: 'Probability and Near Misses: BINGO'
+author: "Maude Elovitz"
+date: "12/9/2021"
+---
+# How can we stats that?
+
+**Maude:** Welcome to *How can we stats that?*, I am your host, Maude Elovitz. Today, we are joined by special guest Shiela Berman, who has been the Bingo caller at Golden Oaks for over 10 years now. Shiela, can you tell us about the program at Golden Oaks?
+
+**Shiela:** Hi, Maude, thank you so much for having me today. Golden Oaks is a retirement community in the Berkshiers where we have normally around 150 residents. It's a Jewish centered space, and our residents absolutely love the different activities we offer. We follow a structured schedule with a different activity everyday. If it is not a Jewish holiday week, then our schedule is as follows: Monday is scrapbooking day, Tuesday is Jewelry making day, Wednesday is outing day (van into town), Thursday is Bingo day, and Friday is Shabbat.
+
+**Maude:** Wow, that is a packed schedule. I love how involved you are! It's very convienient that our shows are on Wednesdays, so you can take everything you learn today to the Bingo game tomorrow!
+
+**Shiela:** Exactly, now Maude, what exactly am I learning about today? I haven't been to school in forever, so I am a little nervous...
+
+**Maude:** Great question, Shiela. I have been hosting this show for about 6 months now, and every month I choose a different statistics topic to make *fun* and relatable to today's youth. This months topic is continuous distributions, and I really wanted to work from the outside-in and look at an example and then talk about how it relates to different continuous distributions. This way we can think *outside the Bingo card* (ha).
+
+**Shiela:** Oh exciting! I am jazzed to tell my granddaughter all about this. 
+
+**Maude:** I am excited for you to tell her, too! Today we are going to be talking about the Beta Distribution!
+
+# Postage Stamp: The Beta Distribution
+
+**Maude:** So, here we go. The knitty (ha) - gritty side of the Beta Distribution. First, let's talk about why you would want to use the beta distribution to model your work. The Beta Distribution is used to model proportions, or numbers between 0 and 1. There are 2 componenets to the Beta distribution, alpha and beta, which we will model as aa and bb, to distinguish from our boundaries of a and b.
+
+In short hand, if our random variable follows a beta distribution, we would write: Y~Beta(α, β), where aa and bb are shape parameters. 
+
+**Disclaimer** the alpha and beta parameters are not necessarily probabilities, but to conceptualize it, it might be easier to think of them as the (aa) probability of success and (bb) probability of failure. 
+
+Aerin Kim wrote a great blog post for Towards Data Science (check it out here: https://towardsdatascience.com/beta-distribution-intuition-examples-and-derivation-cf00f4db57af) which I will be referencing as we dissect the Beta Distribution. 
+
+While we are looking at the PDF, we can see that we have a constant of 1/B(aa, bb) which is something called a normalizing constant that helps our PDF stay within its boundaries of (0,1). We can also see that we have the numerator of x to the power of something times (x-1) to the power of something else. This nugget of information that I pulled out is also called a 'kernel' of a distribution, and this is actually a kernel of the binomial distribution. I know you probably haven't seen the binomial distribution before, Sheila, but my other readers have, as we talked about this in March of this year! If you have time, you should really check out that episode, I talk about the probability of getting a job given that you interviewed 100 times, very interesting!
+
+In this case, as Kim notes, if we are looking at the PDF of the Beta distribution, we see that it is actually a version of the binomial distribution. This is helful when we are thinking about what alpha (aa) and beta (bb) mean. A cool part of the beta distribution is it is very intuitive. Because we are looking at probabilities, we can sometimes choose our aa and bb. If you think the probability of success is very high, maybe go for a higher aa and your bb will be (1-aa).  
+
+As said above, the most important part of the Beta distribution is it models probabilities. Essentially, we are modeling the probability of success, vs the binomial distribution we are modeling the number of successes. The intuitive side of the beta distribution is where the binomial and beta differ, and why one is continuous (beta), and one is discrete (alpha).
+
+## Expected Value and Variance
+
+Hold on to your Bingo card, Shiela, we're about to do a deep dive into calculations vs expectations! Even further, for each probability distribution, you can measure a different expected value and variance (standard deviation squared). 
+
+**Shiela:** Wow, that was a lot of information! Super interesting, and I definitely will look at that episode from March.
+
+**Maude:** Yes, it is a lot of information. That's why I want to apply it to something everyone knows, BINGO! 
+
+**Shiela:** Amazing. I hope this explanation is a *black out*!
+
+# Bingo: Real-World Applications
+
+## Identifying our Successes and Failures
+
+**Shiela:** So Maude, something I am hesitant of with modeling Bingo, because you did such a great job of explaining above what a success and what a failure is, is what exactly is a success and a failure in terms of Bingo? 
+
+**Maude:** Great question. Let's start with the easy answer of a success is what ever you identify it as in the game, for clarity purposes, let's do 5-in-a-row = win, and proportion of wins in 100 games = probability of success. Now, with failure, that is a little more difficult. With Bingo, there are many many different ways to fail, and interestingly enough, there are many ways to model failure. A student named  at the University of California Berkeley did a great job of modeling a certain type of failure: a *near miss*. 
+
+Check out the article here: https://www.stat.berkeley.edu/~aldous/157/Old_Projects/chon.pdf
+
+A near miss is an almost-miss, meaning you are close to being successful. In Bingo, for example, this is, for example, if you get 4/5 of the B-boxes filled out, but then 1/5 of the N-boxes, but someone else who is playing gets 5/5 in a row. Essentially, you ALMOST had a Bingo, but it is a near miss because 1/5 of the B-boxes are empty. One important aspect of a near miss is what sort of scenario it is modeling. If we are modeling a skill based game, a near miss is a good indicator for future success. But, if we are modeling a chance based game, a near miss does not indicate anything about a future success.
+
+An important factor of  Bingo and specifically near misses, is there are other factors that go into why a near miss occurs. In William's example, he notes how important the number of people also playing Bingo in the same game has an effect on the the likelihood of a near miss. He finds that the more people playing, the higher likelyhood of a near-miss. This makes sense logically, as everyone has their own board, but the same likelyhood of winning (12 different ways to get 5-in-a-row).
+
+That models the probability of a near miss, given the number of turns it takes to get a Bingo, regardless of the number of people playing. This is the equation we will use to get our bb (probability of a near-miss, given n turns to get bingo), and then we will find aa by doing (1-aa) (probability of not a near miss, given n turns to get a bingo). So, we aren't necessarily modeling winning/losing, but our random variables we are identifying are as follows for our future experiements/problems:
+
+Y = the probability of not getting a near miss after 28 turns of Bingo [That is what we are identifying as our success]
+
+We are choosing 28 because when using the equation, after trial and error on my end, 28 trials gets you a value close to 50%.
+
+Now, let's get our aa and bb. 
+
+```{r}
+p_fail_bb = 0.0033*(exp(0.1782*28))
+p_fail_bb
+#Shows us that the probability of failure, or getting a near miss, is about 0.4847.
+
+p_success_aa = (1-p_fail_bb)
+p_success_aa
+#Shows us that the probability of success, or not getting a near miss, is about 0.5153037.
+```
+
+Here, we can see what this looks like on a graph:
+
+```{r}
+#retrieved from https://stephens999.github.io/fiveMinuteStats/beta.html
+p = seq(0,1, length=100)
+plot(p, dbeta(p, 52, 48), ylab="density", type ="l", col=4)
+```
+
+This aligns well with what we calculated above, seeing as the proprtions are aa = 0.52 (estimated) and bb = 0.48 (estimated). That means that most of the values will fall within the 0.4 to 0.6 range, so somewhere areound the 0.5 range, as we can see above. 
+
+**Sheila:** Sooooo interesting! That was so cool! Now I can see why people get so frustrated during our Thursday night Bingo games, and also why a lot of people win around the 30th-35th round.
+
+# Beta Distribution Simulation
+
+**Maude: ** Yes, good thinking Sheila! So, now that we have our aa and bb, we can use those in our Beta distribution! Hooray! Let's say we wanted to find the probability that the proportion of games that you did not score a near miss is between 0.3 and 0.5.
+
+Important aspect here is we have to convert our above probability, so we are saying that out of 100 games, with a probability of a near miss being 0.48, we are saying that you had a near miss 48 times, so our bb is 48 in this case. On the flip side, with a probability of NOT a near miss being 0.52, we are saying that you had not a near miss 52 times, so our aa is 52 in this case.
+
+## What is the probability of a not near miss probability falling within the range of 0.3 to 0.5?
+
+```{r}
+set.seed(338)
+Y = rbeta(n = 10000, shape1 = 52, shape2 = 48)
+mean((Y > 0.3) & (Y < 0.5))
+```
+
+This shows us that as our RV Y~Beta(aa = 52, bb = 48), the probability that the proportion of not-near misses falls between 0.3 (30% of games) and 0.5 (50% of games) is 0.35, or 35% chance. 
+
+# Example Problem
+
+## How does our probability change if we want to find the probability of not a near miss after 15 turns? After 3 turns?
+
+Y = the probability of not getting a near miss after n turns of Bingo
+
+### After 15 turns:
+
+### Answer:
+
+```{r}
+#Example 1
+p_fail_bb_example_1 = 0.0033*(exp(0.1782*15))
+p_fail_bb_example_1
+#Shows us that the probability of failure, or getting a near miss, is about 0.0478.
+
+p_success_aa_example_1 = (1-p_fail_bb_example_1)
+p_success_aa_example_1
+#Shows us that the probability of success, or not getting a near miss, is about 0.9522.
+
+#Then, we calculate the same probabilities from above
+set.seed(338)
+Y_example1 = rbeta(n = 10000, shape1 = 5, shape2 = 95)
+mean((Y_example1 > 0.1) & (Y_example1 < 0.15))
+```
+
+You will get 0.0262. The reason we are getting about 3%, is the values we have chosen (lower alpha and higher beta) will make our graph right skewed, meaning the majority of the probabilities are falling to the left side of the graph. We can see this as well when we calculate the expected value of this beta simulation ((5/95+5) = 0.05, so most of our values are going to fall around 0.05.
+
+### After 3 Turns: 
+
+### Answer:
+
+```{r}
+#Example 2
+p_fail_bb_example_2 = 0.0033*(exp(0.1782*3))
+p_fail_bb_example_2
+#Shows us that the probability of failure, or getting a near miss, is about 0.0056.
+
+p_success_aa_example_2 = (1-p_fail_bb_example_2)
+p_success_aa_example_2
+#Shows us that the probability of success, or not getting a near miss, is about 0.9944.
+
+#Then, we calculate the same probabilities from above
+set.seed(338)
+Y_example2 = rbeta(n = 10000, shape1 = 99, shape2 = 1)
+mean((Y_example2 > 0.95) & (Y_example2 < 0.99))
+```
+
+You will get 0.3633. The reason we are getting about 36%, is the values we have chosen (higher alpha and lower beta) will make our graph left skewed, meaning the majority of the probabilities are falling to the right side of the graph. We can see this as well when we calculate the expected value of this beta simulation ((99/99+1) = 0.99, so most of our values are going to fall around 0.99.
+
+**Shiela:** Yes, I definitely did not get those ones. Well, at least I learned a lot!
+
+**Maude:** Thank you so much for coming, Shiela, it has been a pleasure to have you!
+
+# Bonus Statistics subject of the month: Gamma and Beta Distribution
+
+To continue with our theme this month of connecting named probability distributions, I would like to show you guys a funky connection between the Gamma Distribution and the Beta Distribution. The Gamma Distribution (represented in short hand as Y ~ Gamma(aa, bb) has two parameters, aa which is the shape parameter, and bb, which is the scale parameter. If you have two RV where:
+
+X ~ Gamma(aa1, 1)
+Y ~ Gamma(aa2, 1)
+
+Then X(bb2)/X(bb2)+Y(bb1) ~ Beta(aa1, aa2)
+
+Let's visualize this to have it make more sense.
+
+We have:
+X ~ Gamma(aa = 6, bb = 2)
+Y ~ Gamma(aa = 3, bb = 4)
+
+```{r, message= FALSE, warning=FALSE}
+library(mosaic)
+library(patchwork)
+
+# Original distribution of X
+X = rgamma(n = 10000, shape = 6, scale = 2)
+Y = rgamma(n = 10000, shape = 3, scale = 4)
+
+shape1 = 2
+shape2 = 4
+
+plot_x = gf_histogram( ~ X) + 
+  labs(title = "X ~ Gamma(6, 2)")
+plot_y = gf_histogram(~ Y) +
+  labs(title = "Y~Gamma(3, 4)")
+
+# Distribution of function of X
+Z = X*shape2/((X*shape2)+(Y*shape1))
+plot_z = gf_histogram( ~ Z) + 
+  labs(title = "Z = X*shape2/((X*shape2)+(X*shape1)) ~ Beta(aa1, aa2)", 
+       subtitle = "X ~ Gamma(6, 2), Y ~ Gamma(3, 4)")
+
+# Check what the chi-square(df = 1) distribution actually looks like...
+W = rbeta(n = 10000, shape1 = 6, shape2 = 3)
+plot_w = gf_histogram( ~ W) + 
+  labs(title = "W ~ Beta(6, 3)")
+
+plot_x 
+plot_y
+plot_z
+plot_w
+```
+
+We can see here that the transformation of the two gamma distributions (X and Y) and the beta distribution with parameters of 6 and 3 look the same, demonnstrating that our theorem checks out.
+
+**Sources**
+
+Aerin Kim, Beta Distribution - Intuition, Examples, and Derivation 
+https://towardsdatascience.com/beta-distribution-intuition-examples-and-derivation-cf00f4db57af
+
+William Chon, Near Misses in Bingo
+https://www.stat.berkeley.edu/~aldous/157/Old_Projects/chon.pdf
+
+
+
+
+
+
+
+
+
+
+
+

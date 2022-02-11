@@ -1,0 +1,442 @@
+---
+title: "SNAP and Farmers Market Analysis"
+author: "Maude Elovitz"
+output:
+  flexdashboard::flex_dashboard:
+    storyboard: true
+    theme: cerulean
+---
+
+```{r}
+SNAP_and_Market_data <- read.csv("SNAP_and_Market_data.csv")
+library(flexdashboard)
+library(tidyverse)
+library(broom)
+library(dplyr)
+library(maps)
+library(plotlyGeoAssets)
+library(plotly)
+library(magrittr)
+library(ggplot2)
+library(DT)
+```
+
+###  Project Description
+
+**Supplemental Nutrition Assistance Program (SNAP) History**
+
+The Supplemental Nutrition Assistance Program, SNAP, is a program run by the United States Food and Drug Administration, the USDA, that works to combat food insecurity across the United States (C et al., 2013). SNAP, previously known as food stamps, was started in 1960, and the Food Stamp Act of 1964 was the next step in enacting this program (C et al., 2013). Next, the program spread nationally in 1970, and is now the SNAP program, which still runs federally (C et al., 2013). The SNAP program has all of the right intentions, but is not as accessible as one would think.
+
+
+**Why is this project important?**
+
+Social justice and statistics should go hand-in-hand more than they do. This research project will demonstrate how numerical explanations can highlight social issues more than people think. The SNAP program has all of the right intentions, but numerically it is not as accessible as one would think. Fresh fruits and vegetables are a necessity to anyone's diet, let alone access to them should be granted to everyone in the world regardless of income/employment status. Additionally, farmers markets, previously called "curb markets" (Neal, 2019) are a staple to communities of local fruits and vegetables, and therefore should accept payment of all kinds from *everyone* in the state, not just those who can pay by credit card, debit card, or cash. If a national organization like the USDA is managing all of the 8,000+ markets in the United States, and also the SNAP program, they should be equalizing access across to both the SNAP program and farmers market program across the country. 
+
+**My project will analyze SNAP and farmers market state-wide data.**
+
+Here are three areas I will analyze:
+
+* SNAP state-wide data from September 2019- September 2020
+* SNAP Authorized Farmers Market data from 2013-2019
+* The comparison between the number of SNAP recipients in each state and the number of SNAP authorized markets available to     them in 2019
+
+**Data Description**:
+
+My SNAP and farmers market data was gathered from various USDA websites, listed here (cited in APA citation below):
+
+* SNAP recipient data from September 2019 - September 2020: https://www.fns.usda.gov/pd/supplemental-nutrition-assistance-program-snap
+* SNAP redemptions data from 2013 - 2019: https://www.fns.usda.gov/resource/snap-redemptions-report-fy-2013-2019
+* SNAP Authorized Farmers Markets from 2013-2019: https://www.fns.usda.gov/resource/snap-redemptions-report-fy-2013-2019
+* State population data: https://www.census.gov/newsroom/press-kits/2019/national-state-estimates.html
+* State area/state abbreviations/state region data all came from the R dataset state.x77
+
+--- 
+
+**Citations**:
+
+C., C., F., I., & N. (2013). Supplemental Nutrition Assistance Program: Examining the Evidence to Define Benefit Adequacy (1367838986 1000244802 A. L. Yaktine & 1367838987 1000244802 J. A. Caswell, Eds.). National Academies Press.
+
+Bureau, U. (2019, December 30). 2019 national and state population estimates. Retrieved May 10, 2021, from https://www.census.gov/newsroom/press-kits/2019/national-state-estimates.html
+
+Gallison, R. (2019, November 08). Farmers' markets: An introduction. Retrieved May 10, 2021, from https://huetrition.com/blog/farmers-markets-an-introduction/
+
+Neal, A. (2019, April 26). "Meet me at the market" - The evolution of a farmers market. Retrieved May 17, 2021, from https://www.usda.gov/media/blog/2013/08/07/meet-me-market-evolution-farmers-market
+
+SNAP Data Tables. (n.d.). Retrieved May 10, 2021, from https://www.fns.usda.gov/pd/supplemental-nutrition-assistance-program-snap
+
+SNAP redemptions Report, FY 2013-2019. (n.d.). Retrieved May 10, 2021, from https://www.fns.usda.gov/resource/snap-redemptions-report-fy-2013-2019
+
+SNAP redemptions Report, FY 2013-2019. (n.d.). Retrieved May 10, 2021, from https://www.fns.usda.gov/resource/snap-redemptions-report-fy-2013-2019
+
+
+### SNAP Analysis: Data Exploration
+
+```{r}
+table1 = SNAP_and_Market_data %>%
+  #creates the new column that notes the percentage of the state's population who received SNAP in 2019
+  mutate(SNAP_population = (SNAP_Recipients_Sep2019/population)*100) %>%
+  select(State, stateRegion, SNAP_population) %>%
+  #arranges in descending order
+  arrange(desc(SNAP_population))
+
+#Retrieved from: https://rstudio.github.io/DT/
+datatable(table1, 
+          rownames = FALSE,
+          caption = "Table 1: Percentage of State Population using SNAP in 2019")
+```
+
+--- 
+
+**Which state had the highest percentage?**
+
+New Mexico is from the West, and had the highest percentage (21.48%) of their state population in 2019 as SNAP recipients. That's a little over 1:5 people in the state of New Mexico accessing SNAP in 2019, and that is not even how many people applied. Frequently, many people apply for the SNAP program, but not everyone receives confirmation that they are able to access SNAP. In America, SNAP is an application process through your state, and this requires literacy (either internet of written application literacy) and that is a really dangerous assumption to make about any population. Meaning, most likeley, more people *need* to be on the SNAP program in America, but many people do not have the resources to *even apply successfully*, let alone America doesn't have the resources to provide the benefits to every applicant after receiving their application. Imagine, you are not a native English speaker, and have a difficult time filling out a written application, or you are an individual who did not have access to an education that taught you how to use a computer. You hire someone (an interpreter of sorts) to assist you with your application, but then you find out you weren't even accepted. The interpreter was too expensive, so you could not afford dinner for over a week, and now are hungry, all because you tried to apply to a program that would help you have *access* to food. These systemic issues need altering, and the first and best way to start this process is awareness and education around the issues at play. 
+
+---
+
+**Which region is sitting at the top?**
+
+This table shows us that after New Mexico, the next 5 highest SNAP percentage states, with respect to their overall state population in 2019 (Louisiana, West Virginia, Mississippi, Alabama, and Oklahoma) were from the Southern region of the United States. That is fascinating! There is common rhetoric in America of the south having a high percentage of their overall population in poverty, or is struggling to feel comfortable in the resources they have, and this grouping of states demonstrates this numerically. 
+
+
+### SNAP Analysis: Percentage of Population on SNAP in 2019
+
+```{r}
+SNAP_and_Market_data %>%
+  #adds the colmn to compute SNAP recipient percentages for the state
+  mutate(SNAP_population = (SNAP_Recipients_Sep2019/population)*100) %>%
+  #creates the graph
+  ggplot(aes(
+    #reorders the graph to show the highest population percentages first
+    x = fct_reorder(State, SNAP_population), 
+    #shows we are comparing SNAP populations         
+    y = SNAP_population,
+    #makes the bars colored by their region
+    fill = stateRegion)) + 
+  #chooses the format of the ggplot
+  geom_col() + 
+  #makes the graph horizontal, helps with visualization
+  coord_flip() +
+  #round() Retrieved from: https://stat.ethz.ch/R-manual/R-devel/library/base/html/Round.html
+  #geom_text() Retrieved from: http://www.sthda.com/english/wiki/ggplot2-barplots-quick-start-guide-r-software-and-data-visualization
+  #adds text to the bars
+  geom_text(aes(label = paste(round(SNAP_population, digits = 2), "%")), hjust = 2.5, color = "black", size = 2.5) +
+  #labs(fill = "") Retrieved from: https://www.datanovia.com/en/blog/ggplot-legend-title-position-and-labels/ 
+  #adds lables and titles to x and y axis and legend
+  labs(title = "Percentage of Population on SNAP in 2019",
+       fill = "State Region",
+       x = "State",
+       y = "") +
+  #changes background of graph
+  theme_minimal()
+```
+
+---
+
+**What does this graph tell us?**
+
+Here we have a visualization demonstrating the percentage of the state's population in 2019 who were SNAP recipients, much like Table 1. We can see here that the southern states are primarily grouped together, in two main groups on the graph, with a couple of other Southern states scattered throughout the visualization. The southern states are the only region that the states from the region sit together in two main groups, for the other regions, the states are scattered throughout the visualization.
+
+*Note*
+
+These data do not hold the capabilities of running an accurate model, so these comments above are noting trends in the visualization in relation to the regions of the United States. 
+
+### SNAP Analysis: U.S. Map showing SNAP Recipient Percent change from September 2019 - September 2020
+
+```{r}
+#retrieved from Dr. BJ Stubbs in-class CS-347 presentation
+#creates the new geographic scope for the map to be focused on states, not countries
+new_scope <- list(
+  scope = 'usa',
+  projection = list(type = 'albers usa'),
+  lakecolor = toRGB('white')
+)
+
+#retrieved from Dr. BJ Stubbs in-class CS-347 presentation
+SNAP_and_Market_data %>%
+  plot_geo(
+    #sets the location markers to be states
+    locations = ~state,
+    #sets the type of the map
+    type = 'choropleth',
+    #assigns the color bar to correspond to Percent_Change_Sep19vsSep20
+    z= ~Percent_Change_Sep19vsSep20,
+    #assigns the text to the hover
+    #Retrieved from: https://plotly.com/r/hover-text-and-formatting/
+    hoverinfo = "text",
+    #sets the hover text
+    text = ~paste(State, "\n",
+      ifelse(Percent_Change_Sep19vsSep20<0, 
+             paste(abs(Percent_Change_Sep19vsSep20), "% decrease"),
+             paste(Percent_Change_Sep19vsSep20, "% increase"))),
+    #sets the location to states
+    locationmode="USA-states") %>%
+  #adjusts geography layout to the new_scope created above in the function new_scope
+  layout(geo=new_scope,
+         #changes the title of the map
+         title = "SNAP Recipient Percent change from September 2019 - September 2020") %>%
+  #Retrieved from: https://www.rdocumentation.org/packages/plotly/versions/4.9.3/topics/colorbar
+  #customizes the colorbar on the map
+  colorbar(limits = c(-10, 45), title = "SNAP Recipient Changes (%)")
+```
+
+---
+
+**Analysis**
+
+*Note*
+
+Hover over the map for information about each state!
+
+In this map, we can see the increase/decrease in SNAP recipients for each state from 2019-2020. It should be noted that COVID-19 had a large impact on SNAP recipients in the United States as a whole, so these data need to be interpreted as such. We can see the largest percent increase is in Florida, with approximately a 41.1% increase of their state's population using SNAP in 2019 vs using SNAP in 2020. 
+
+The largest decrease was in Montana, where we see approximately a 9.4% decrease in SNAP recipients from September 2019 - September 2020. A decrease does not necessarily mean that less people needed SNAP in September 2020. It could also mean that the state was not able to give as much funding to the SNAP program in September 2020, too, possibly in this case due to allocate funding elsewhere because of COVID-19. 
+
+### Farmers Markets History
+
+Farmers markets have been around in the United States since 1634 (first market was in Boston, yay!), but the first markets in the world were recorded in Egypt over 5,000 years ago, where farmers would sell their produce along the Nile River (Gallison, 2019). Although they have an extensive history, farmers markets had a resurgence of popularity in the 1970s (Gallison, 2019). 
+
+The goal of farmers markets is to directly benefit local and small farmers by cutting out grocery stores and big agricultural farms (Gallison, 2019). The complicated issue with Farmers Markets, is they are not as inclusive as they seem to the consumers. Countless Americans struggle with food insecurity, as we saw in our SNAP analysis. In this report, we will see an analysis of farmers markets in each state that accept SNAP benefits as payment, therefore opening up their consumer base to be more inclusive.
+
+
+### Markets Analysis: Comparing Number of SNAP Authorized Markets in 2013 to 2019 in each State
+
+```{r}
+SNAP_and_Market_data %>%
+  #Retrieved from: https://plotly.com/r/bar-charts/
+  #creates the plotly graph
+  plot_ly(
+    #assigns the x variable to be state abbreviations (more readable)
+    x = ~state,
+    #assigns the numerical variable to be FY2013_SNAP_Authorized_Markets
+    y = ~FY2013_SNAP_Authorized_Markets, 
+    #chooses the type of plot (bar plot)
+    type = 'bar',
+    #names the trace to be labeled in the colorbar (legend)
+    name = "2013",
+    #Retrieved from: https://plotly.com/r/hover-text-and-formatting/
+    #Assigns the text to the hover
+    hoverinfo = "text",
+    #assigns the text
+    text = ~paste(State,
+                  "\nSNAP Authorized Markets in 2013:", FY2013_SNAP_Authorized_Markets,
+                  "\nSNAP Authorized Markets in 2019:", FY2019_SNAP_Authorized_Markets)) %>%
+  #Adds the 2019 data onto the graph    
+  add_trace(
+    #sets the numerical trace as FY2019_SNAP_Authorized_Markets
+    y = ~ FY2019_SNAP_Authorized_Markets,
+    #names the trace in the legend
+    name = "2019",
+    #Retrieved from: https://plotly.com/r/hover-text-and-formatting/
+    #assigns the text to the hover
+    hoverinfo = "text",
+    #assigns the text
+    text = ~paste(ifelse(Approved_Markets_Changes<0, 
+                           paste(State, "lost", abs(Approved_Markets_Changes), "SNAP Authorized \nmarkets from 2013-2019"),
+                           paste(State, "gained", Approved_Markets_Changes, "SNAP Authorized\nmarkets from 2013-2019")))) %>%
+      #adds labels and titles to x and y axis and legend
+      layout(xaxis = list(title = "State"),
+             yaxis = list(title = "Number of Markets"),
+             title = "Comparing Number of SNAP Authorized Markets in 2013 to 2019")
+```
+
+---
+
+**Did they lose or gain?**
+
+Hover over the *orange bars* to see, for each state, how many markets the state lost/gained from 2013-2019, and hover over the *blue bar* to see the individual state data (name, number of markets in 2013, number of markets in 2019). 
+
+From 2013-2019, we can see certain states had large increases/decreases in the number of SNAP authorized farmers markets that the state has. Specifically, we see the largest increase from 2013-2019 in SNAP authorized farmers markets in Massachusetts, where they added 130 SNAP authorized markets to their state. The biggest decrease in SNAP authorized farmers markets from 2013-2019 was in Iowa, where they lost 132 SNAP authorized farmers markets in their state. 
+
+Now, many factors could go into why a state gains/loses SNAP authorized markets, the main factor being allocations of funds. Also, when speaking to a local farmer in Oregon, she noted that the application process for anything through the USDA is a time-consuming and emotional-energy-dependent process. Farmers markets, and sometimes specifically farmers, need to *want* to be a SNAP authorized market *enough* to fill out paperwork and wait for approval. This means the awareness around the SNAP program and what access to farmers markets does for individuals needs to increase, in order to drive this motion of change.
+
+
+### Markets Analysis: Lingering Questions with data
+
+```{r}
+table2 = SNAP_and_Market_data %>%
+  select(State, Percent_Change_SNAP_Authorized, Percent_Change_SNAP_Redemptions) %>%
+  filter(Percent_Change_SNAP_Authorized < 0 & Percent_Change_SNAP_Redemptions > 0)
+
+#Retrieved from: https://rstudio.github.io/DT/
+datatable(table2, 
+          rownames = FALSE,
+          caption = "Table 2: Percent Changes")
+```
+
+---
+
+**More spending, but less markets**
+
+One would think that as the number of SNAP authorized farmers markets increased, the number of SNAP redemptions ($) at farmers markets would increase, too. The above table demonstrates states where from 2013-2019, there was a *decrease* in SNAP authorized farmers markets (measured in % decrease), while there was an *increase* in SNAP redemptions (measured in % increase) in the state. If people are spending more of their SNAP dollars at farmers markets, there should be more markets available for them to do so. A future analysis idea would be to look for data demonstrating why this is, and if this data is being used to implement policy change of allocating funds for more markets in these states who are on an upwards trajectory of SNAP dollars being spent at markets. 
+
+### Markets Analysis: Lingering Questions with data
+
+```{r}
+table3 = SNAP_and_Market_data %>%
+  select(State, Percent_Change_SNAP_Authorized, Percent_Change_SNAP_Redemptions) %>%
+  filter(Percent_Change_SNAP_Authorized > 0 & Percent_Change_SNAP_Redemptions < 0)
+
+datatable(table3, 
+          rownames = FALSE,
+          caption = "Table 3: Percent Changes (cont.)")
+```
+
+---
+
+**More markets, but less spending**
+
+This table shows the states where there was an increase in SNAP authorized farmers markets, but a decrease in SNAP redemptions from 2013-2019 at markets. There could also many reasons for why this is, one possible explanation is available education to those who need it on where SNAP dollars can be spent throughout the state. The stigma surrounding food insecurity leads the country to not talk about it as a pertinent issue. By silencing the problem, we are not normalizing the solution (SNAP, for example), which could lead to certain states to lack accessible information on how to help those on the SNAP program find everything that is available to them. 
+
+### Markets Analysis: Map showing Average SNAP Authorized Markets by Region From the 2019 Fiscal Year
+
+```{r}
+#retrieved from Dr. BJ Stubbs in-class CS-347 presentation
+#creates the new geographic scope for the map to be focused on states, not countries
+new_scope <- list(
+  scope = 'usa',
+  projection = list(type = 'albers usa'),
+  lakecolor = toRGB('white')
+)
+
+
+SNAP_and_Market_data %>%
+  #groups the data by state region
+  group_by(stateRegion) %>%
+  #creates the column showing the average number of SNAP authorized markets per region
+  mutate(state_per_region = n(),
+         markets_per_region = sum(FY2019_SNAP_Authorized_Markets)/state_per_region) %>%
+  #ungroups the data
+  ungroup() %>%
+  #retrieved from Dr. BJ Stubbs in-class CS-347 presentation
+  #makes the map
+  plot_geo(
+    #sets the location markers to be states
+    locations = ~state,
+    #sets the type of map
+    type = 'choropleth',
+    #sets the colorbar to fill by markets_per_region
+    z= ~markets_per_region,
+    #assigns the text to the hover
+    hoverinfo = "text",
+    #sets the hover text
+    #Retrieved from: https://plotly.com/r/hover-text-and-formatting/
+    text = ~paste(State,
+                  "\nSNAP Authorized Markets in 2019:",
+                  FY2019_SNAP_Authorized_Markets,
+                  "\nState Region:",
+                  stateRegion,
+                  "\nAverage markets in region:",
+                  trunc(markets_per_region)),
+    #sets the location to states
+    locationmode="USA-states") %>%
+  #adjusts geography layout to the new_scope created above in the function new_scope
+  layout(geo=new_scope,
+         #changes the title of the map
+         title = "Average SNAP Authorized Markets by Region\n(Displaying data from the 2019 fiscal year)") %>%
+  #Retrieved from: https://www.rdocumentation.org/packages/plotly/versions/4.9.3/topics/colorbar
+  #changes the title of the colorbar
+  colorbar(title = "Number of Markets")
+
+```
+
+---
+
+**Which regions had the most/least markets (on average) in 2019?**
+
+When looking at the SNAP and Market data, it is also important to look at the regions of the country as a whole. We can see here that the Northeast region of the United States had the highest average number of markets in 2019, whereas the Southern region of the United States had the lowest average number of markets in 2019 across the states. The Northeast region's average number of SNAP authorized markets in 2019 was 102, and in the South, the average number of SNAP authorized markets in 2019 was 52. That is almost 2x the number of markets (when comparing the Northeast and South's averages), in the Northeast's states than the South's states.
+
+### Comparison: Map showing Average SNAP Recipients per SNAP Authorized Market by Region From the 2019 Fiscal Year
+
+```{r, results="asis"}
+#retrieved from Dr. BJ Stubbs in-class CS-347 presentation
+#creates the new geographic scope for the map to be focused on states, not countries
+new_scope <- list(
+  scope = 'usa',
+  projection = list(type = 'albers usa'),
+  lakecolor = toRGB('white')
+)
+
+SNAP_and_Market_data %>%
+  #groups the data by state region
+  group_by(stateRegion) %>%
+  #creates the column showing the average ratio (# SNAP recipients:1 SNAP authorized market) per region
+  mutate(people_per_region = sum(SNAP_Recipients_Sep2019)/sum(FY2019_SNAP_Authorized_Markets)) %>%
+  #ungroups the data
+  ungroup() %>%
+  #retrieved from Dr. BJ Stubbs in-class CS-347 presentation
+  #makes the map
+  plot_geo(
+    #sets the location markers to be states
+    locations = ~state,
+    #sets the type of map
+    type = 'choropleth',
+    #sets the colorbar to fill by avgpeopleperregion
+    z= ~people_per_region,
+    #assigns the text to the hover
+    hoverinfo = "text",
+    #sets the hover text
+    #Retrieved from: https://plotly.com/r/hover-text-and-formatting/
+    text = ~paste(State,
+                  "\nSNAP Recipients per Market:",
+                  people_per_market,
+                  "\nState Region:",
+                  stateRegion,
+                  "\nAverage SNAP recipients per market per region:",
+                  #retrieved from: https://stat.ethz.ch/R-manual/R-devel/library/base/html/Round.html 
+                  trunc(people_per_region)),
+    #Retrieved from: https://plotly.com/r/hover-text-and-formatting/
+    #sets the location to states
+    locationmode="USA-states") %>%
+  #adjusts geography layout to the new_scope created above in the function new_scope
+  layout(geo=new_scope,
+         #changes the title of the map
+         title = "Average SNAP Recipients per SNAP Authorized Farmers market by Region\n(Displaying data from the 2019 fiscal year)") %>%
+  #Retrieved from: https://www.rdocumentation.org/packages/plotly/versions/4.9.3/topics/colorbar
+  #changes the title of the colorbar
+  colorbar(title = "SNAP Recipients\nPer Market")
+```
+
+---
+
+**People who use SNAP vs Markets that are available to them**
+
+In this plot, the goal is to show the division by region of the ratio of SNAP recipients:1 SNAP authorized market. 
+
+- In the Northeast, we can see the lowest ratio, being approximately **7,136 SNAP recipients:1 SNAP authorized market**. 
+
+- In the South, we can see the highest ratio, with approximately **18,217 SNAP recipients:1 SNAP authorized market**. 
+
+Simply, there are not enough SNAP authorized markets to reach demand. The Northeast's ratio is better, and could be a bench mark for other regions to meet, but all in all there are just not enough markets to reach the demand of number of SNAP recipients. 
+
+### Comparison: Comparing SNAP Recipients and SNAP Authorized Markets in 2019
+
+```{r}
+SNAP_and_Market_data %>%
+  #groups by the state
+  group_by(State) %>%
+  #adds the column
+  plot_ly(x = ~FY2019_SNAP_Authorized_Markets, 
+          y = ~SNAP_Recipients_Sep2019, type = 'scatter', 
+          mode = 'markers', 
+          marker = list(size = ~people_per_market, sizeref = 500, sizemode = 'area', opacity = 0.5),
+          text = ~State,
+          color = ~ people_per_market,
+          hovertemplate = paste(
+            "<b>%{text}</b><br><br>",
+            "SNAP Recipients 2019: %{y:,.0f}<br>",
+            "SNAP Authorized Farmers Markets: %{x:.0}<br>",
+            "Number of SNAP Recipients per market: %{marker.size:,.0f}",
+            "<extra></extra>")) %>% 
+  layout(xaxis = list(title = "2019 SNAP Authorized Farmers Markets"), 
+                 yaxis = list(title = "2019 SNAP Recipients"),
+                 title = "Comparing SNAP Recipients and SNAP Authorized Markets in 2019") %>%
+  colorbar(limits = c(0,80000), title = "Number of SNAP Recipients per Market")
+```
+
+---
+
+**People who use SNAP vs Markets that are available to them (cont.)**
+
+This graph is similar to the map, but it shows us a slight linear relationship between the number of 2019 SNAP Authorized Farmers Markets and the number of SNAP Recipients in 2019. I am focusing on the trend in the data, as a linear model would not be best to fit this data because the states do not have commonalities, they are all individual units of study. Fitting any sort of regression model would yield inconclusive and non-representative results in this case. 
+
+To conclude this analysis, we will focus on Alabama, the one yellow marker on our graph. Alabama had *719,827 SNAP recipients in 2019*, and only *9 SNAP authorized farmers markets*. This brought their ratio to approximately 79,980 SNAP recipients:1 SNAP authorized farmers market. That ratio is unacceptable, and sadly the ratios across the country are unacceptable, too. Accessibility to markets, information, education, and food are all essential when talking about the SNAP program, and the use of SNAP related farmers market data tells us that story, and makes us hungry for change. 
